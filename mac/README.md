@@ -1,1 +1,3 @@
-curl -sSL "https://raw.githubusercontent.com/johnvilsack/init/refs/heads/main/mac/init.sh" -o init.sh && chmod +x init.sh && ./init.sh
+curl -sSL "https://raw.githubusercontent.com/johnvilsack/init/HEAD/mac/test.sh" -o init.sh && chmod +x init.sh && ./init.sh
+
+curl -fsSL https://raw.githubusercontent.com/johnvilsack/init/HEAD/mac/test.sh
