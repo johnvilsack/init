@@ -52,7 +52,7 @@ if [ ! -d "$HOME/github/dotfiles" ]; then
   mkdir -p "$(dirname "$HOME/github/dotfiles")"
   git clone "https://github.com/johnvilsack/dotfiles" "$HOME/github/dotfiles"
   chmod +x "$HOME/github/dotfiles/mac/install.sh"
-  bash "$HOME/github/dotfiles/mac/install.sh"
+#  bash "$HOME/github/dotfiles/mac/install.sh"
 else
   echo "Dotfiles repository already exists at $HOME/github/dotfiles"
 fi
