@@ -34,7 +34,16 @@ fi
 
 # Login to GitHub CLI
 
-gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." &&gh auth login --hostname github.com --git-protocol https --web
+gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." && gh auth login --hostname github.com --git-protocol https --web
+if ! gh auth status --hostname github.com &>/dev/null; then
+    #echo "Already logged in to GitHub"
+    echo "Not logged in to GitHub. Logging in..."
+    gh auth login --hostname github.com --git-protocol https --web
+else
+    #echo "Not logged in to GitHub. Logging in..."
+    #gh auth login --hostname github.com --git-protocol https --web
+fi
+
 
 # Clone dotfiles repo now that we're logged in
 if [ ! -d "$HOME/github/dotfiles" ]; then
@@ -47,3 +56,8 @@ if [ ! -d "$HOME/github/dotfiles" ]; then
 else
   echo "Dotfiles repository already exists at $HOME/github/dotfiles"
 fi
+
+
+
+
+
