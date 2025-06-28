@@ -21,11 +21,11 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 # Rosetta is required for Apple Silicon Macs to run x86_64 binaries
-if [[ "$(uname -m)" == "arm64" ]] && ! /usr/sbin/softwareupdate --history | grep -q "Rosetta"; then
-  echo "Rosetta is not installed. Installing Rosetta..."
-  sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license || echo "Rosetta may already be installed"
+if [[ "$(uname -m)" == "arm64" ]] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
+    echo "Rosetta is not installed. Installing Rosetta..."
+    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
 else
-  echo "Rosetta is already installed or not needed."
+    echo "Rosetta is already installed or not needed."
 fi
 
 # Github CLI
