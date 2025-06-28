@@ -37,7 +37,8 @@ else
 fi
 
 # Login to GitHub CLI
-if ! gh auth status --hostname github.com >/dev/null 2>&1; then
+if gh auth status --hostname github.com &>/dev/null; then
+# if ! gh auth status --hostname github.com >/dev/null 2>&1; then
   echo "Already authenticated with GitHub CLI"
 else
   gh auth login \
