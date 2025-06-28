@@ -34,7 +34,7 @@ fi
 
 # Login to GitHub CLI
 
-gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." && gh auth login --hostname github.com --git-protocol https --web
+#gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." && gh auth login --hostname github.com --git-protocol https --web
 if ! gh auth status --hostname github.com &>/dev/null; then
     #echo "Already logged in to GitHub"
     echo "Not logged in to GitHub. Logging in..."
