@@ -2,19 +2,7 @@
 
 set -euo pipefail
 
-echo "*** SETUP MAC ***"
-
-# Check for file that prevents installation
-# if [[ -f "$HOME/.config/init.done" ]]
-# then
-#   INIT_NO_INSTALL="$(cat "$HOME/.config/init.done" 2>/dev/null)"
-#   if [[ -n "${INIT_NO_INSTALL}" ]]
-#   then
-#     abort "Init cannot be installed because ${INIT_NO_INSTALL}."
-#   else
-#     abort "Init cannot be installed because $HOME/.config/init.done exists!"
-#   fi
-# fi
+echo "*** SETUP MY MAC ***"
 
 # Install Homebrew
 if ! command -v brew >/dev/null 2>&1; then
