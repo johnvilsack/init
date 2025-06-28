@@ -8,6 +8,11 @@ echo "*** SETUP MY MAC ***"
 if ! command -v brew >/dev/null 2>&1; then
   echo "[INSTALLING] Homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  
+  # Add Homebrew to PATH for Apple Silicon
+  if [[ "$(uname -m)" == "arm64" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
 fi
 
 # Rosetta is required for Apple Silicon Macs to run x86_64 binaries
@@ -30,14 +35,15 @@ if ! gh auth status --hostname github.com &>/dev/null; then
     gh auth login --hostname github.com --git-protocol https --web
 fi
 
+export GITHUBPATH="$HOME/github"
+export DOTFILESPATH="$HOME/github/dotfiles"
 
 # Clone dotfiles repo now that we're logged in
 if [ ! -d "$HOME/github/dotfiles" ]; then
   echo "[CLONING] dotfiles repository"
   mkdir -p "$(dirname "$HOME/github/dotfiles")"
   git clone "https://github.com/johnvilsack/dotfiles" "$HOME/github/dotfiles"
-  export GITHUBPATH="$HOME/github"
-  export DOTFILESPATH="$HOME/github/dotfiles"
+
   chmod +x "$DOTFILESPATH/mac/mac-install.sh"
 fi
 
@@ -45,7 +51,3 @@ if [[ -f "$DOTFILESPATH/mac-install.sh" ]]; then
   echo "[RUNNING] dotfiles install script"
   exec /bin/bash "$DOTFILESPATH/mac-install.sh"
 fi
-
-
-
-
