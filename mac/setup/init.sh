@@ -16,36 +16,25 @@ fi
 
 # Install Homebrew
 if ! command -v brew >/dev/null 2>&1; then
-  echo "🍺 Installing Homebrew"
+  echo "Installing Homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Rosetta is required for Apple Silicon Macs to run x86_64 binaries
 if [[ "$(uname -m)" == "arm64" ]] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
     echo "Rosetta is not installed. Installing Rosetta..."
-    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
-else
-    echo "Rosetta is already installed or not needed."
+    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license 2>/dev/null
 fi
 
 # Github CLI
 if ! command -v gh >/dev/null 2>&1; then
   echo "Installing GitHub CLI..."
   brew install gh
-else
-  echo "GitHub CLI is already installed."
 fi
 
 # Login to GitHub CLI
-if gh auth status --hostname github.com &>/dev/null; then
-# if ! gh auth status --hostname github.com >/dev/null 2>&1; then
-  echo "Already authenticated with GitHub CLI"
-else
-  gh auth login \
-    --hostname github.com \
-    --git-protocol https \
-    --web
-fi
+
+gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." &&gh auth login --hostname github.com --git-protocol https --web
 
 # Clone dotfiles repo now that we're logged in
 if [ ! -d "$HOME/github/dotfiles" ]; then
