@@ -23,7 +23,7 @@ fi
 # Rosetta is required for Apple Silicon Macs to run x86_64 binaries
 if [[ "$(uname -m)" == "arm64" ]] && ! /usr/sbin/softwareupdate --history | grep -q "Rosetta"; then
   echo "Rosetta is not installed. Installing Rosetta..."
-  /usr/sbin/softwareupdate --install-rosetta --agree-to-license || echo "Rosetta may already be installed"
+  sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license || echo "Rosetta may already be installed"
 else
   echo "Rosetta is already installed or not needed."
 fi
