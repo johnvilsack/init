@@ -52,8 +52,11 @@ if [ ! -d "$HOME/github/dotfiles" ]; then
 
 fi
 
-echo "[RUNNING] dotfiles install script"
-exec /bin/bash "$HOME/github/dotfiles/mac/install.sh"
+if [[ -f "$HOME/github/dotfiles/mac/install.sh" ]]; then
+  echo "[RUNNING] dotfiles install script"
+  exec /bin/bash "$HOME/github/dotfiles/mac/install.sh"
+fi
+
 
 
 
