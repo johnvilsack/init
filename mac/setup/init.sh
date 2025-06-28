@@ -37,12 +37,13 @@ if [ ! -d "$HOME/github/dotfiles" ]; then
   mkdir -p "$(dirname "$HOME/github/dotfiles")"
   git clone "https://github.com/johnvilsack/dotfiles" "$HOME/github/dotfiles"
   chmod +x "$HOME/github/dotfiles/mac/install.sh"
-
+  export GITHUBPATH="$HOME/github"
+  export DOTFILESPATH="$HOME/github/dotfiles"
 fi
 
 if [[ -f "$HOME/github/dotfiles/mac/install.sh" ]]; then
   echo "[RUNNING] dotfiles install script"
-  exec /bin/bash "$HOME/github/dotfiles/mac/install.sh"
+  exec /bin/bash "$DOTFILESPATH/mac/install.sh"
 fi
 
 
