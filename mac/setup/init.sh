@@ -25,6 +25,8 @@ if [[ "$(uname -m)" == "arm64" ]] && ! /usr/sbin/softwareupdate --history | grep
   echo "Rosetta is not installed. Installing Rosetta..."
   /usr/sbin/softwareupdate --install-rosetta --agree-to-license || echo "Rosetta may already be installed"
 else
+  echo "Rosetta is already installed or not needed."
+fi
 
 # Github CLI
 if ! command -v gh >/dev/null 2>&1; then
