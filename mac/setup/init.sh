@@ -25,7 +25,7 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-log_info "*** SETUP MY MAC ***"
+log_info "*** SETUP MY MAC! ***"
 
 # Install Homebrew
 if ! command -v brew >/dev/null 2>&1; then
@@ -83,5 +83,5 @@ fi
 
 if [[ -f "$DOTFILESPATH/mac/mac-install.sh" ]]; then
   log_info "Running dotfiles install script"
-  exec /bin/bash "$DOTFILESPATH/mac/mac-install.sh"
+  source "$DOTFILESPATH/mac/mac-install.sh"
 fi
