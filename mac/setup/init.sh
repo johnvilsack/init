@@ -34,6 +34,7 @@ if ! command -v brew >/dev/null 2>&1; then
   # Add Homebrew to PATH for Apple Silicon
   if [[ "$(uname -m)" == "arm64" ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
+    log_success "Homebrew added to PATH for Apple Silicon"
   fi
   log_success "Homebrew Installed"
 fi
