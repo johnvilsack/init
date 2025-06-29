@@ -62,9 +62,10 @@ if ! gh auth status --hostname github.com &>/dev/null; then
 fi
 
 log_info "Setting variables"
+export OS="mac"
 export GITHUBPATH="$HOME/github"
 export DOTFILESPATH="$GITHUBPATH/dotfiles"
-export DOTFILESHOME="$DOTFILESPATH/mac/files/home"
+export DOTFILESHOME="$DOTFILESPATH/$OS/files/HOME"
 
 # Clone dotfiles repo now that we're logged in
 if [ ! -d "$DOTFILESPATH" ]; then
@@ -80,7 +81,7 @@ if [ ! -d "$DOTFILESPATH" ]; then
   log_success "Made scripts executable"
 fi
 
-if [[ -f "$DOTFILESPATH/mac/mac-install.sh" ]]; then
+if [[ -f "$DOTFILESPATH/$OS/$OS-install.sh" ]]; then
   log_info "Running dotfiles install script"
-  source "$DOTFILESPATH/mac/mac-install.sh"
+  source "$DOTFILESPATH/$OS/$OS-install.sh"
 fi
