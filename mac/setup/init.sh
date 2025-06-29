@@ -36,18 +36,19 @@ if ! gh auth status --hostname github.com &>/dev/null; then
 fi
 
 export GITHUBPATH="$HOME/github"
-export DOTFILESPATH="$HOME/github/dotfiles"
+export DOTFILESPATH="$GITHUBPATH/dotfiles"
+export DOTFILESHOME="$DOTFILESPATH/mac/files/home"
 
 # Clone dotfiles repo now that we're logged in
-if [ ! -d "$HOME/github/dotfiles" ]; then
+if [ ! -d "$DOTFILESPATH" ]; then
   echo "[CLONING] dotfiles repository"
-  mkdir -p "$(dirname "$HOME/github/dotfiles")"
-  git clone "https://github.com/johnvilsack/dotfiles" "$HOME/github/dotfiles"
-
-  chmod +x "$DOTFILESPATH/mac/mac-install.sh"
+  mkdir -p "$(dirname "$DOTFILESPATH")"
+  git clone "https://github.com/johnvilsack/dotfiles" "$DOTFILESPATH"
+  echo "[PERMISSIONS] Setting permissions for dotfiles"
+  find "$DOTFILESPATH" -type f -name "*.sh" -exec chmod +x {} \;
 fi
 
-if [[ -f "$DOTFILESPATH/mac-install.sh" ]]; then
+if [[ -f "$DOTFILESPATH/mac/mac-install.sh" ]]; then
   echo "[RUNNING] dotfiles install script"
-  exec /bin/bash "$DOTFILESPATH/mac-install.sh"
+  exec /bin/bash "$DOTFILESPATH/mac/mac-install.sh"
 fi
