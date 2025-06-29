@@ -51,7 +51,6 @@ if ! command -v gh >/dev/null 2>&1; then
 fi
 
 # Login to GitHub CLI
-#gh auth status --hostname github.com &>/dev/null || echo "Logging in to Github..." && gh auth login --hostname github.com --git-protocol https --web
 if ! gh auth status --hostname github.com &>/dev/null; then
     gh auth login --hostname github.com --git-protocol https --web
     if [ $? -eq 0 ]; then
