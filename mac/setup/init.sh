@@ -82,7 +82,7 @@ if [ ! -d "$DOTFILESPATH" ]; then
   log_success "Made scripts executable"
 fi
 
-if [[ -f "$DOTFILESPATH/$OS/$OS-install.sh" ]]; then
+if [[ -f "$DOTFILESPATH/$OS/scripts/$OS-install.sh" ]]; then
   log_info "Running dotfiles install script"
-  source "$DOTFILESPATH/$OS/$OS-install.sh"
+  source "$DOTFILESPATH/$OS/scripts/$OS-install.sh"
 fi
