@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+# Preset vars needed for installer
+export OS="mac"
+export GITHUBPATH="$HOME/github"
+export DOTFILESPATH="$GITHUBPATH/dotfiles"
+export DOTFILESHOME="$DOTFILESPATH/$OS/files/HOME"
+
 # Logging
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -27,62 +33,80 @@ log_error() {
 
 log_info "*** SETUP MY MAC! ***"
 
+
 # Install Homebrew
-if ! command -v brew >/dev/null 2>&1; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  
-  # Add Homebrew to PATH for Apple Silicon
-  if [[ "$(uname -m)" == "arm64" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    log_success "Homebrew added to PATH for Apple Silicon"
+function get_homebrew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Add Homebrew to PATH for Apple Silicon
+    if [[ "$(uname -m)" == "arm64" ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      log_success "Homebrew added to PATH for Apple Silicon"
+    fi
+    log_success "Homebrew Installed"
   fi
-  log_success "Homebrew Installed"
-fi
+}
 
 # Rosetta is required for Apple Silicon Macs to run x86_64 binaries
-if [[ "$(uname -m)" == "arm64" ]] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
-    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license 2>/dev/null
-    log_success "Rosetta Installed"
-fi
+function get_rosetta() {
+  if [[ "$(uname -m)" == "arm64" ]] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
+      sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license 2>/dev/null
+      log_success "Rosetta Installed"
+  fi
+}
 
 # Github CLI
-if ! command -v gh >/dev/null 2>&1; then
-  brew install gh
-  log_success "GitHub CLI Installed"
-fi
+function get_github() {
+  if ! command -v gh >/dev/null 2>&1; then
+    brew install gh
+    log_success "GitHub CLI Installed"
+  fi
+}
 
 # Login to GitHub CLI
-if ! gh auth status --hostname github.com &>/dev/null; then
-    gh auth login --hostname github.com --git-protocol https --web
-    if [ $? -eq 0 ]; then
-        log_success "Logged in to GitHub CLI"
-    else
-        log_error "Failed to log in to GitHub CLI"
-        exit 1
-    fi
-fi
-
-log_info "Setting variables"
-export OS="mac"
-export GITHUBPATH="$HOME/github"
-export DOTFILESPATH="$GITHUBPATH/dotfiles"
-export DOTFILESHOME="$DOTFILESPATH/$OS/files/HOME"
+function login_github() {
+  if ! gh auth status --hostname github.com &>/dev/null; then
+      gh auth login --hostname github.com --git-protocol https --web
+      if [ $? -eq 0 ]; then
+          log_success "Logged in to GitHub CLI"
+      else
+          log_error "Failed to log in to GitHub CLI"
+          exit 1
+      fi
+  fi
+}
 
 # Clone dotfiles repo now that we're logged in
-if [ ! -d "$DOTFILESPATH" ]; then
-  mkdir -p "$(dirname "$DOTFILESPATH")"
-  git clone "https://github.com/johnvilsack/dotfiles" "$DOTFILESPATH"
-  if [ $? -eq 0 ]; then
-    log_success "Cloned dotfiles repository"
-  else
-    log_error "Failed to clone dotfiles repository"
-    exit 1
+function get_dotfiles() {
+  if [ ! -d "$DOTFILESPATH" ]; then
+    mkdir -p "$(dirname "$DOTFILESPATH")"
+    git clone "https://github.com/johnvilsack/dotfiles" "$DOTFILESPATH"
+    if [ $? -eq 0 ]; then
+      log_success "Cloned dotfiles repository"
+    else
+      log_error "Failed to clone dotfiles repository"
+      exit 1
+    fi
+    find "$DOTFILESPATH" -type f -name "*.sh" -exec chmod +x {} \;
+    log_success "Made scripts executable"
   fi
-  find "$DOTFILESPATH" -type f -name "*.sh" -exec chmod +x {} \;
-  log_success "Made scripts executable"
-fi
+}
 
-if [[ -f "$DOTFILESPATH/$OS/scripts/$OS-install.sh" ]]; then
-  log_info "Running dotfiles install script"
-  source "$DOTFILESPATH/$OS/scripts/$OS-install.sh"
-fi
+function run_dotfiles_installer() {
+  if [[ -f "$DOTFILESPATH/$OS/scripts/$OS-install.sh" ]]; then
+    log_info "Running dotfiles install script"
+    source "$DOTFILESPATH/$OS/scripts/$OS-install.sh"
+  fi
+}
+
+function install_main() {
+  get_homebrew
+  get_rosetta
+  get_github
+  login_github
+  get_dotfiles
+  run_dotfiles_installer
+}
+
+install_main
