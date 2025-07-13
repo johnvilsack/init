@@ -107,7 +107,8 @@ function run_dotfiles_installer() {
 
 function install_main() {
   get_homebrew
-  get_rosetta
+  # Trying to sunset Rosetta
+  #get_rosetta
   get_github
   login_github
   get_dotfiles
