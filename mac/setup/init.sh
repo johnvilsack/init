@@ -10,7 +10,7 @@ export DOTFILESHOME="$DOTFILESPATH/$OS/files/HOME"
 
 # Temporary bypass to fix intune issues
 export HOMEBREW_BUNDLE_MAS_SKIP=1
-export HOMEBREW_FORBIDDEN_CASKS="google-chrome,microsoft-teams,the-unarchiver"
+export HOMEBREW_FORBIDDEN_CASKS="google-chrome microsoft-teams the-unarchiver"
 export HOMEBREW_FORBIDDEN_FORMULAE="mas"
 
 # Logging
