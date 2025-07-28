@@ -47,8 +47,9 @@ function install_macapps() {
     else
         log_info "macapps install script already exists, skipping installation"
     fi
+    exit;
 }
-exit;
+
 # Install Homebrew
 function get_homebrew() {
   if ! command -v brew >/dev/null 2>&1; then
@@ -117,6 +118,8 @@ function run_dotfiles_installer() {
 
 function install_main() {
   install_macapps
+  echo 'Failed exit'
+  exit;
   get_homebrew
   # Trying to sunset Rosetta
   #get_rosetta
