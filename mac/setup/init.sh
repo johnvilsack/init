@@ -1,5 +1,4 @@
 #!/bin/bash
-#FOOFOO
 set -euo pipefail
 
 # Preset vars needed for installer
@@ -13,41 +12,75 @@ export HOMEBREW_BUNDLE_MAS_SKIP=1
 export HOMEBREW_FORBIDDEN_CASKS="google-chrome microsoft-teams the-unarchiver"
 export HOMEBREW_FORBIDDEN_FORMULAE="mas"
 
-# Logging
+# Set to unavailable until we install and check for it.
+export CLOG_AVAILABLE=false
+export CLOG_FILENAME="mac-install.log"
+export CLOG_TAG="init"
+export CLOG_SHOW_TIMESTAMP=true
+export CLOG_DISPLAY_TAG=true
+
+# legacy colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+# Check for clog, trap errors if available
+if command -v clog >/dev/null 2>&1; then
+  CLOG_AVAILABLE=true
+fi
+
+# Smart logging functions that use clog when available, fallback to legacy
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    if [[ "$CLOG_AVAILABLE" == true ]]; then
+        clog INFO "$1"
+    else
+        echo -e "${BLUE}[INFO]${NC} $1"
+    fi
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    if [[ "$CLOG_AVAILABLE" == true ]]; then
+        clog SUCCESS "$1"
+    else
+        echo -e "${GREEN}[SUCCESS]${NC} $1"
+    fi
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    if [[ "$CLOG_AVAILABLE" == true ]]; then
+        clog WARNING "$1"
+    else
+        echo -e "${YELLOW}[WARNING]${NC} $1"
+    fi
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    if [[ "$CLOG_AVAILABLE" == true ]]; then
+        clog ERROR "$1"
+    else
+        echo -e "${RED}[ERROR]${NC} $1"
+    fi
 }
-
-log_info "*** SETUP MY MAC! ***"
-
 
 ## MY MACAPPS INSTALLER HERE
 function install_macapps() {
-    if [[ ! -f "$DOTFILESPATH/$OS/scripts/$OS-install.sh" ]]; then
+    if [[ ! -f "$HOME/.local/.macapps_last_hash" ]]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/johnvilsack/macapps/HEAD/install.sh)"
-        log_success "macapps installed to $HOME/.local/bin"
+        clog INFO "***** MAC INSTALL BEGUN! *****"
+        clog SUCCESS "macapps installed to $HOME/.local/bin"
     else
-        log_info "macapps install script already exists, skipping installation"
+        clog INFO "***** MAC INSTALL BEGUN! *****"
+        clog INFO "macapps already installed, skipping installation"
     fi
-    exit;
+
+    if command -v clog >/dev/null 2>&1; then
+        CLOG_AVAILABLE=true
+        clog INFO "clog ENABLED"
+    else
+        log_error "clog did not install correctly"
+    fi
 }
 
 # Install Homebrew
@@ -117,16 +150,15 @@ function run_dotfiles_installer() {
 }
 
 function install_main() {
+  # Install MacApps first to get logging
   install_macapps
-  echo 'Failed exit'
-  exit;
   get_homebrew
-  # Trying to sunset Rosetta
-  #get_rosetta
+  get_rosetta
   get_github
   login_github
   get_dotfiles
   run_dotfiles_installer
+  clog SUCCESS "***** MAC INSTALL COMPLETE! *****"
 }
 
 install_main
