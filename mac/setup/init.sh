@@ -39,6 +39,16 @@ log_error() {
 log_info "*** SETUP MY MAC! ***"
 
 
+## MY MACAPPS INSTALLER HERE
+function install_macapps() {
+    if [[ ! -f "$DOTFILESPATH/$OS/scripts/$OS-install.sh" ]]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/johnvilsack/macapps/HEAD/install.sh)"
+        log_success "macapps installed to $HOME/.local/bin"
+    else
+        log_info "macapps install script already exists, skipping installation"
+    fi
+}
+exit;
 # Install Homebrew
 function get_homebrew() {
   if ! command -v brew >/dev/null 2>&1; then
@@ -106,6 +116,7 @@ function run_dotfiles_installer() {
 }
 
 function install_main() {
+  install_macapps
   get_homebrew
   # Trying to sunset Rosetta
   #get_rosetta
