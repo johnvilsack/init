@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#FOOFOO
 set -euo pipefail
 
 # Preset vars needed for installer
