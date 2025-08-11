@@ -87,6 +87,7 @@ function install_macapps() {
 # Install Homebrew
 function get_homebrew() {
   if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     
     # Add Homebrew to PATH for Apple Silicon
