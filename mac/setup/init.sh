@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 set -euo pipefail
 
 # Preset vars needed for installer
