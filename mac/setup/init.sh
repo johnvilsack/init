@@ -151,8 +151,8 @@ function run_dotfiles_installer() {
 
 function install_main() {
   # Install MacApps first to get logging
-  install_macapps
   get_homebrew
+  install_macapps
   get_rosetta
   get_github
   login_github
