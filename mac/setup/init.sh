@@ -2,6 +2,7 @@
 set -euo pipefail
 
 # Preset vars needed for installer
+export PATH="$HOME/.local/bin:$PATH"
 export OS="mac"
 export GITHUBPATH="$HOME/github"
 export DOTFILESPATH="$GITHUBPATH/dotfiles"
