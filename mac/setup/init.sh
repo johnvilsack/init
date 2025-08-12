@@ -29,6 +29,7 @@ NC=$'%{\033[0m%}'
 # Ensure zsh sees newly installed commands
 refresh_path() { 
     rehash 2>/dev/null || true
+    clog INFO "Refreshed Path"
 }
 
 # Simple logging before clog is available
@@ -60,9 +61,10 @@ install_macapps() {
     fi
     
     # Ensure this live zsh sees ~/.local/bin tools
+    clog INFO "Setting Path"
     export PATH="$HOME/.local/bin:$PATH"
     refresh_path
-    
+    clog INFO "Path Set"
     # Verify clog is available
     if command -v clog >/dev/null 2>&1; then
         clog INFO "clog ENABLED"
@@ -160,13 +162,18 @@ install_main() {
     # First two steps use simple logging since clog isn't available yet
     get_homebrew
     install_macapps
-    
+    clog INFO "Macapps Done"
     # Everything after this uses clog directly
     get_rosetta
+    clog INFO "Rosetta Done"
     get_github
+    clog INFO "Get Github Done"
     login_github
+    clog INFO "Login Github Done"
     get_dotfiles
+    clog INFO "Dotfiles Get Done"
     run_dotfiles_installer
+    clog INFO "Dotfiles Installer Done"
     
     clog SUCCESS "***** MAC INSTALL COMPLETE! *****"
 }
