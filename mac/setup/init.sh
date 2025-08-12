@@ -53,15 +53,15 @@ log_error() {
 install_macapps() {
     if [[ ! -f "$HOME/.local/.macapps_last_hash" ]]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/johnvilsack/macapps/HEAD/install.sh)"
-        log_info "***** MAC INSTALL BEGUN! *****"
-        log_success "macapps installed to $HOME/.local/bin"
+        printf "***** MAC INSTALL BEGUN! *****"
+        printf "macapps installed to $HOME/.local/bin"
     else
-        log_info "***** MAC INSTALL BEGUN! *****"
-        log_info "macapps already installed, skipping installation"
+        clog INFO "***** MAC INSTALL BEGUN! *****"
+        clog INFO "macapps already installed, skipping installation"
     fi
     
     # Ensure this live zsh sees ~/.local/bin tools
-    clog INFO "Setting Path"
+    printf "Setting Path"
     export PATH="$HOME/.local/bin:$PATH"
     refresh_path
     clog INFO "Path Set"
