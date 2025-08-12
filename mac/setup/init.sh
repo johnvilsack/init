@@ -131,13 +131,24 @@ get_dotfiles() {
     if [[ ! -d "$DOTFILESPATH" ]]; then
         clog INFO "Cloning dotfiles repository..."
         mkdir -p "$(dirname "$DOTFILESPATH")"
-        git clone "https://github.com/johnvilsack/dotfiles" "$DOTFILESPATH"
-        if [[ $? -eq 0 ]]; then
-            clog SUCCESS "Cloned dotfiles repository"
-        else
-            clog ERROR "Failed to clone dotfiles repository"
-            exit 1
-        fi
+        
+        # Retry logic for network operations
+        local retries=3
+        local delay=5
+        for ((i=1; i<=retries; i++)); do
+            if git clone "https://github.com/johnvilsack/dotfiles" "$DOTFILESPATH"; then
+                clog SUCCESS "Cloned dotfiles repository"
+                break
+            else
+                if [[ $i -eq $retries ]]; then
+                    clog ERROR "Failed to clone dotfiles repository after $retries attempts"
+                    exit 1
+                else
+                    clog WARNING "Clone attempt $i failed, retrying in ${delay}s..."
+                    sleep $delay
+                fi
+            fi
+        done
         
         find "$DOTFILESPATH" -type f -name "*.sh" -exec chmod +x {} \;
         clog SUCCESS "Made scripts executable"
@@ -148,12 +159,13 @@ get_dotfiles() {
 
 run_dotfiles_installer() {
     local installer="$DOTFILESPATH/$OS/scripts/$OS-install.sh"
-    if [[ -f "$installer" ]]; then
+    if [[ -f "$installer" && -r "$installer" ]]; then
         clog INFO "Running dotfiles install script"
         # shellcheck disable=SC1090
         source "$installer"
     else
-        clog WARNING "Dotfiles installer not found at $installer"
+        clog ERROR "Dotfiles installer not found or not readable at $installer"
+        exit 1
     fi
 }
 
