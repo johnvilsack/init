@@ -173,7 +173,7 @@ install_main() {
     get_dotfiles
     clog INFO "Dotfiles Get Done"
     run_dotfiles_installer
-    clog INFO "Dotfiles Installer Done"
+    clog INFO "Dotfiles mac-install Installer Done"
     
     clog SUCCESS "***** MAC INSTALL COMPLETE! *****"
 }
