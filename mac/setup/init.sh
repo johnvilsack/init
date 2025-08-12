@@ -160,16 +160,16 @@ run_dotfiles_installer() {
 # ---- Main installation flow ----
 install_main() {
     # First two steps use simple logging since clog isn't available yet
-    get_homebrew
-    install_macapps
-    clog INFO "Macapps Done"
-    # Everything after this uses clog directly
-    get_rosetta
-    clog INFO "Rosetta Done"
-    get_github
-    clog INFO "Get Github Done"
-    login_github
-    clog INFO "Login Github Done"
+    # get_homebrew
+    # install_macapps
+    # clog INFO "Macapps Done"
+    # # Everything after this uses clog directly
+    # get_rosetta
+    # clog INFO "Rosetta Done"
+    # get_github
+    # clog INFO "Get Github Done"
+    # login_github
+    # clog INFO "Login Github Done"
     get_dotfiles
     clog INFO "Dotfiles Get Done"
     run_dotfiles_installer
