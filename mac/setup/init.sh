@@ -115,6 +115,7 @@ login_github() {
     if ! gh auth status --hostname github.com &>/dev/null; then
         clog INFO "Logging in to GitHub..."
         gh auth login --hostname github.com --git-protocol https --web
+        gh auth setup-git
         if [[ $? -eq 0 ]]; then
             clog SUCCESS "Logged in to GitHub CLI"
         else
