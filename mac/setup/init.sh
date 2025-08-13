@@ -29,7 +29,7 @@ NC=$'%{\033[0m%}'
 # Ensure zsh sees newly installed commands
 refresh_path() { 
     rehash 2>/dev/null || true
-    clog INFO "Refreshed Path"
+    echo "Refreshed Path"
 }
 
 # Simple logging before clog is available
